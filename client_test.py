@@ -1,5 +1,5 @@
 import unittest
-from client3 import getDataPoint
+from client3 import getDataPoint,getRatio
 
 class ClientTest(unittest.TestCase):
   def test_getDataPoint_calculatePrice(self):
@@ -8,6 +8,10 @@ class ClientTest(unittest.TestCase):
       {'top_ask': {'price': 121.68, 'size': 4}, 'timestamp': '2019-02-11 22:06:30.572453', 'top_bid': {'price': 117.87, 'size': 81}, 'id': '0.109974697771', 'stock': 'DEF'}
     ]
     """ ------------ Add the assertion below ------------ """
+    quote=quotes[0]
+    actualDataPoint=(quote['stock'],quote['top_bid']['price'],quote['top_ask']['price'],(quote['top_bid']['price']+quote['top_ask']['price'])/2)
+    generatedDataPoint=getDataPoint(quote)  
+    self.assertEqual(generatedDataPoint,actualDataPoint)
 
   def test_getDataPoint_calculatePriceBidGreaterThanAsk(self):
     quotes = [
@@ -15,10 +19,14 @@ class ClientTest(unittest.TestCase):
       {'top_ask': {'price': 121.68, 'size': 4}, 'timestamp': '2019-02-11 22:06:30.572453', 'top_bid': {'price': 117.87, 'size': 81}, 'id': '0.109974697771', 'stock': 'DEF'}
     ]
     """ ------------ Add the assertion below ------------ """
-
+    quote=quotes[0]
+    #assert statement to check if the bid price is greater than the ask price
+    self.assertGreater(quote['top_bid']['price'],quote['top_ask']['price'])
 
   """ ------------ Add more unit tests ------------ """
-
+  def test_getRatio_calculateRatio(self):
+    prices={'ABC':120.48,'DEF':117.87}
+    self.assertEqual(getRatio(prices['ABC'],prices['DEF']),prices['ABC']/prices['DEF'])
 
 
 if __name__ == '__main__':
